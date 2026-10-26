@@ -3,19 +3,17 @@ layout: default
 title: Home
 ---
 {%- assign home = site.data.home %}
-<section class="hero">
-  <div class="wrap">
+{%- assign has_photo = false %}
+{%- if home.hero_image and home.hero_image != "" %}{% assign has_photo = true %}{% endif %}
+<section class="hero{% if has_photo %} hero--photo{% endif %}">
+  {%- if has_photo %}
+  <img class="hero-photo" src="{{ home.hero_image | relative_url }}" alt="" fetchpriority="high">
+  {%- endif %}
+  <div class="wrap hero-inner">
     <div class="hero-intro">{{ home.intro | markdownify }}</div>
-    {%- assign words = home.headline | strip | split: ' ' %}
-    <h1 class="hero-title">{% for w in words %}{% if forloop.last %}<span class="nowrap">{{ w | remove: '.' }}<span class="ellipsis" aria-hidden="true"><i></i><i></i><i></i></span></span>{% else %}{{ w }} {% endif %}{% endfor %}</h1>
+    <h1 class="hero-title">{{ home.headline }}</h1>
   </div>
 </section>
-
-{%- if home.hero_image and home.hero_image != "" %}
-<div class="wrap">
-  <figure class="hero-media"><img src="{{ home.hero_image | relative_url }}" alt="" fetchpriority="high"></figure>
-</div>
-{%- endif %}
 
 <section class="about" id="about-us" aria-label="About us">
   <div class="wrap">
@@ -29,7 +27,7 @@ title: Home
     <ul class="pillars">
       {%- for item in home.services %}
       <li class="pillar">
-        <h3>{{ item.title }}</h3>
+        <h3><span class="pillar-num">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span><span class="pillar-bar" aria-hidden="true">|</span>{{ item.title }}</h3>
         <p>{{ item.text }}</p>
       </li>
       {%- endfor %}
@@ -55,7 +53,7 @@ title: Home
     </div>
     {%- assign cfs_photo_count = cfs.images | size %}
     {%- if cfs_photo_count > 0 %}
-    <div class="cfs-photos">
+    <div class="cfs-photos{% if cfs_photo_count == 1 %} cfs-photos--one{% endif %}">
       {%- for photo in cfs.images limit: 2 %}
       <figure><img src="{{ photo | relative_url }}" alt="" loading="lazy" decoding="async"></figure>
       {%- endfor %}

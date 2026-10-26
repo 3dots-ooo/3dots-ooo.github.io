@@ -168,7 +168,7 @@ p { margin: 0 0 1em; }
 
 .hero-intro {
   max-width: 33rem;
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  margin-bottom: clamp(1.25rem, 2.5vw, 2rem);
   color: var(--ink-soft);
   font-family: var(--sans);
   font-size: clamp(1.05rem, 1.6vw, 1.25rem);
@@ -185,25 +185,39 @@ p { margin: 0 0 1em; }
   letter-spacing: -0.035em;
 }
 
-/* The three dots: they close the headline like an ellipsis and appear one by one, once. */
-.ellipsis i {
-  display: inline-block;
-  width: 0.16em;
-  height: 0.16em;
-  margin-left: 0.07em;
-  border-radius: 50%;
-  background: var(--cobalt);
-  animation: dot-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both;
+/* With a photo, the hero fills the screen below the header and the text sits on the photo. */
+.hero--photo {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: calc(100vh - 4.75rem);
+  min-height: calc(100svh - 4.75rem);
+  padding: 0;
+  overflow: hidden;
+  background: var(--ink);
+  color: #fff;
 }
-.ellipsis i:first-child { margin-left: 0.05em; }
-.ellipsis i:nth-child(1) { animation-delay: 0.35s; }
-.ellipsis i:nth-child(2) { animation-delay: 0.6s; }
-.ellipsis i:nth-child(3) { animation-delay: 0.85s; }
 
-@keyframes dot-in {
-  from { transform: scale(0); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.hero--photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 16, 32, 0.78) 0%, rgba(10, 16, 32, 0.4) 45%, rgba(10, 16, 32, 0.08) 100%);
+}
+
+.hero-inner { position: relative; z-index: 1; width: 100%; }
+.hero--photo .hero-inner { padding-block: clamp(2.5rem, 7vw, 5.5rem); }
+.hero--photo .hero-intro { color: rgba(255, 255, 255, 0.9); }
+.hero--photo .hero-intro strong { color: #fff; }
+.hero--photo .hero-title { color: #fff; }
 
 .hero-media img {
   width: 100%;
@@ -225,7 +239,7 @@ p { margin: 0 0 1em; }
 }
 .about-text p { break-inside: avoid; margin: 0 0 1em; }
 
-/* Home: services, joined by a line like connected dots */
+/* Home: services */
 
 .services { padding-block: var(--space); }
 
@@ -247,31 +261,9 @@ p { margin: 0 0 1em; }
   gap: var(--gap);
 }
 
-.pillar { position: relative; padding-top: 2.25rem; }
-
-.pillar::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--cobalt);
-}
-
-.pillar:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 14px;
-  right: calc(-1 * var(--gap));
-  top: 6.5px;
-  height: 1px;
-  background: var(--cobalt);
-  opacity: 0.35;
-}
-
 .pillar h3 { margin-bottom: 0.6rem; font-size: 1.4rem; }
+.pillar-num { color: var(--ink-soft); font-weight: 500; font-variant-numeric: tabular-nums; }
+.pillar-bar { margin: 0 0.45em; color: var(--ink-soft); font-weight: 400; }
 .pillar p { margin: 0; color: var(--ink-soft); font-size: 1.0625rem; }
 
 /* Home: Culture Finance Standard */
@@ -309,18 +301,31 @@ p { margin: 0 0 1em; }
 
 .cfs-closing p { margin: 0; }
 
+/* Two round photos overlapping each other */
 .cfs-photos {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
-}
-.cfs-photos img {
+  position: relative;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  max-width: 30rem;
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+}
+.cfs-photos figure {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
   background: var(--paper);
 }
-.cfs-photos figure:nth-child(2) { margin-top: 3rem; }
+.cfs-photos figure:nth-child(1) { top: 0; left: 0; width: 74%; }
+.cfs-photos figure:nth-child(2) {
+  right: 0;
+  bottom: 0;
+  width: 54%;
+  box-shadow: 0 0 0 0.6rem var(--mist);
+}
+.cfs-photos img { width: 100%; height: 100%; object-fit: cover; }
+.cfs-photos--one { aspect-ratio: 1 / 1; }
+.cfs-photos--one figure:nth-child(1) { width: 100%; }
 
 /* Home: contact */
 
@@ -599,6 +604,7 @@ p { margin: 0 0 1em; }
 
 @media (max-width: 56rem) {
   .cfs-grid { grid-template-columns: 1fr; }
+  .cfs-photos { max-width: 24rem; }
   .event-item { grid-template-columns: 4.5rem minmax(0, 1fr); }
   .event-thumb { grid-column: 1 / -1; order: -1; }
   .event-thumb img { aspect-ratio: 16 / 10; }
@@ -609,19 +615,10 @@ p { margin: 0 0 1em; }
 @media (max-width: 48rem) {
   body { font-size: 1.0625rem; }
   .hero-media img { aspect-ratio: 4 / 3; }
+  .hero--photo { min-height: calc(100vh - 4.5rem); min-height: calc(100svh - 4.5rem); }
   .about-text { column-count: 1; }
 
   .pillars { --gap: 2.25rem; grid-template-columns: 1fr; }
-  .pillar { padding-top: 0; padding-left: 2.25rem; }
-  .pillar::before { top: 0.35rem; }
-  .pillar:not(:last-child)::after {
-    left: 6.5px;
-    right: auto;
-    top: calc(0.35rem + 14px);
-    bottom: calc(-1 * (var(--gap) + 0.35rem));
-    width: 1px;
-    height: auto;
-  }
 
   .offices { grid-template-columns: 1fr; }
   .event-date .day { font-size: 2.4rem; }
@@ -631,5 +628,4 @@ p { margin: 0 0 1em; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .ellipsis i { animation: none; }
 }
