@@ -1,0 +1,14 @@
+{%- comment -%}
+Shows an event time. A time typed as just "18:00" is read by the site's YAML reader
+as a number of seconds (64800), so this turns such numbers back into hours and minutes.
+{%- endcomment -%}
+{%- assign raw = include.time -%}
+{%- assign probe = raw | jsonify -%}
+{%- if probe contains '"' -%}
+{{- raw -}}
+{%- else -%}
+{%- assign hours = raw | divided_by: 3600 -%}
+{%- assign minutes = raw | modulo: 3600 | divided_by: 60 -%}
+{%- if minutes < 10 %}{% assign minutes = minutes | prepend: '0' %}{% endif -%}
+{{- hours }}:{{ minutes -}}
+{%- endif -%}

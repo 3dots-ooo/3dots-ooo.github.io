@@ -1,0 +1,83 @@
+---
+layout: default
+title: Home
+---
+{%- assign home = site.data.home %}
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-intro">{{ home.intro | markdownify }}</div>
+    {%- assign words = home.headline | strip | split: ' ' %}
+    <h1 class="hero-title">{% for w in words %}{% if forloop.last %}<span class="nowrap">{{ w | remove: '.' }}<span class="ellipsis" aria-hidden="true"><i></i><i></i><i></i></span></span>{% else %}{{ w }} {% endif %}{% endfor %}</h1>
+  </div>
+</section>
+
+{%- if home.hero_image and home.hero_image != "" %}
+<div class="wrap">
+  <figure class="hero-media"><img src="{{ home.hero_image | relative_url }}" alt="" fetchpriority="high"></figure>
+</div>
+{%- endif %}
+
+<section class="about" id="about-us" aria-label="About us">
+  <div class="wrap">
+    <div class="about-text">{{ home.about | markdownify }}</div>
+  </div>
+</section>
+
+<section class="services" id="services" aria-labelledby="services-title">
+  <div class="wrap">
+    <h2 class="section-title" id="services-title">{{ home.services_heading }}</h2>
+    <ul class="pillars">
+      {%- for item in home.services %}
+      <li class="pillar">
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.text }}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>
+
+{%- assign cfs = home.cfs %}
+<section class="cfs" id="culture-finance-standard" aria-labelledby="cfs-title">
+  <div class="wrap cfs-grid">
+    <div class="cfs-text">
+      <h2 id="cfs-title">{{ cfs.title }}</h2>
+      <div class="cfs-lead">{{ cfs.lead | markdownify }}</div>
+      {%- assign statement_count = cfs.statements | size %}
+      {%- if statement_count > 0 %}
+      <ul class="cfs-statements">
+        {%- for line in cfs.statements %}
+        <li>{{ line | markdownify | remove: '<p>' | remove: '</p>' | strip }}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
+      <div class="cfs-closing">{{ cfs.closing | markdownify }}</div>
+    </div>
+    {%- assign cfs_photo_count = cfs.images | size %}
+    {%- if cfs_photo_count > 0 %}
+    <div class="cfs-photos">
+      {%- for photo in cfs.images limit: 2 %}
+      <figure><img src="{{ photo | relative_url }}" alt="" loading="lazy" decoding="async"></figure>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </div>
+</section>
+
+{%- assign s = site.data.settings %}
+<section class="contact" id="contact-us" aria-labelledby="contact-title">
+  <div class="wrap">
+    <h2 class="section-title" id="contact-title">{{ home.contact_heading }}</h2>
+    {%- if s.email and s.email != "" %}
+    <p class="contact-email"><a href="mailto:{{ s.email }}">{{ s.email }}</a></p>
+    {%- endif %}
+    <div class="offices">
+      {%- for office in home.offices %}
+      <div class="office">
+        <h3>{{ office.city }}</h3>
+        <p>{{ office.place }}<br>{{ office.address }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>

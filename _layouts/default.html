@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{%- assign s = site.data.settings -%}
+{%- if page.url == "/" -%}
+  {%- assign page_title = s.site_name -%}
+{%- else -%}
+  {%- capture page_title %}{{ page.title }} — {{ s.site_name }}{% endcapture -%}
+{%- endif -%}
+{%- if page.collection -%}
+  {%- assign desc = page.content | strip_html | normalize_whitespace | truncatewords: 30 -%}
+{%- else -%}
+  {%- assign desc = s.description -%}
+{%- endif -%}
+{%- assign share_image = page.image | default: site.data.home.hero_image %}
+<title>{{ page_title | strip }}</title>
+<meta name="description" content="{{ desc | strip | escape }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:site_name" content="{{ s.site_name }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ page_title | strip | escape }}">
+<meta property="og:description" content="{{ desc | strip | escape }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ share_image | absolute_url }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}?v={{ site.time | date: '%s' }}">
+<script src="{{ '/assets/site.js' | relative_url }}?v={{ site.time | date: '%s' }}" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+{% include header.html %}
+<main id="main">
+{{ content }}
+</main>
+{% include footer.html %}
+</body>
+</html>

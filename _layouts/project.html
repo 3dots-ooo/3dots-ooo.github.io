@@ -1,0 +1,38 @@
+---
+layout: default
+---
+<article class="entry">
+  <div class="wrap">
+    <a class="back" href="{{ '/projects/' | relative_url }}">All projects</a>
+    <h1 class="entry-title">{{ page.title }}</h1>
+    {%- if page.image and page.image != "" %}
+    <figure class="entry-cover"><img src="{{ page.image | relative_url }}" alt=""></figure>
+    {%- endif %}
+    <div class="prose">
+      {{ content }}
+    </div>
+    {%- assign photo_count = page.gallery | size %}
+    {%- if photo_count > 0 %}
+    <div class="gallery">
+      {%- for photo in page.gallery %}
+      <a href="{{ photo | relative_url }}"><img src="{{ photo | relative_url }}" alt="Photo {{ forloop.index }} from {{ page.title | escape }}" loading="lazy" decoding="async"></a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+    {%- assign all_projects = site.projects | sort: 'order', 'last' | reverse %}
+    {%- assign here = 0 %}
+    {%- for p in all_projects %}{% if p.url == page.url %}{% assign here = forloop.index0 %}{% endif %}{% endfor %}
+    {%- assign before = here | minus: 1 %}
+    {%- assign after = here | plus: 1 %}
+    <nav class="pager" aria-label="More projects">
+      {%- if here > 0 %}
+      {%- assign prev = all_projects[before] %}
+      <a class="prev" href="{{ prev.url | relative_url }}"><span>Previous project</span><strong>{{ prev.title }}</strong></a>
+      {%- endif %}
+      {%- if after < all_projects.size %}
+      {%- assign next = all_projects[after] %}
+      <a class="next" href="{{ next.url | relative_url }}"><span>Next project</span><strong>{{ next.title }}</strong></a>
+      {%- endif %}
+    </nav>
+  </div>
+</article>

@@ -1,0 +1,31 @@
+---
+layout: default
+title: Projects
+permalink: /projects/
+---
+{%- assign pg = site.data.pages.projects %}
+<section class="page-head">
+  <div class="wrap">
+    <h1 class="page-title">{{ pg.title | default: 'Projects' }}</h1>
+    {%- if pg.intro and pg.intro != "" %}
+    <div class="page-lead">{{ pg.intro | markdownify }}</div>
+    {%- endif %}
+  </div>
+</section>
+<div class="wrap">
+  {%- assign projects = site.projects | sort: 'order', 'last' | reverse %}
+  <ul class="project-grid">
+    {%- for p in projects %}
+    <li>
+      <a class="project-card" href="{{ p.url | relative_url }}">
+        {%- if p.image and p.image != "" %}
+        <img src="{{ p.image | relative_url }}" alt="" loading="lazy" decoding="async">
+        {%- else %}
+        <span class="project-blank" aria-hidden="true"></span>
+        {%- endif %}
+        <h2>{{ p.title }}</h2>
+      </a>
+    </li>
+    {%- endfor %}
+  </ul>
+</div>

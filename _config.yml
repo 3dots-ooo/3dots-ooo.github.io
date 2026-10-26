@@ -1,0 +1,39 @@
+# Site settings. You normally never need to touch this file.
+title: 3dots
+url: "https://www.3dots.ooo"
+baseurl: ""
+timezone: Europe/Istanbul
+future: true
+permalink: pretty
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  events:
+    output: true
+    permalink: /whatson/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: projects
+    values:
+      layout: project
+  - scope:
+      path: ""
+      type: events
+    values:
+      layout: event
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules

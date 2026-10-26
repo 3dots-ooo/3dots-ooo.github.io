@@ -1,0 +1,18 @@
+<header class="site-header" data-header>
+  <div class="wrap">
+    <a class="brand" href="{{ '/' | relative_url }}"><img src="{{ site.data.settings.logo | relative_url }}" alt="3dots" width="168" height="36"></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+      <span data-nav-label>Menu</span>
+      <span class="toggle-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="{{ '/#about-us' | relative_url }}">About</a></li>
+        <li><a href="{{ '/#services' | relative_url }}">Services</a></li>
+        <li><a href="{{ '/projects/' | relative_url }}"{% if page.url contains '/projects/' %} aria-current="true"{% endif %}>Projects</a></li>
+        <li><a href="{{ '/whatson/' | relative_url }}"{% if page.url contains '/whatson/' %} aria-current="true"{% endif %}>What’s On</a></li>
+        <li><a href="{{ '/#contact-us' | relative_url }}">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

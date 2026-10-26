@@ -1,0 +1,44 @@
+---
+layout: default
+title: What’s On
+permalink: /whatson/
+---
+{%- assign pg = site.data.pages.whatson %}
+<section class="page-head">
+  <div class="wrap">
+    <h1 class="page-title">{{ pg.title | default: 'What’s on' }}</h1>
+    {%- if pg.intro and pg.intro != "" %}
+    <div class="page-lead">{{ pg.intro | markdownify }}</div>
+    {%- endif %}
+  </div>
+</section>
+{%- if pg.image and pg.image != "" %}
+<div class="wrap">
+  <figure class="hero-media page-media"><img src="{{ pg.image | relative_url }}" alt=""></figure>
+</div>
+{%- endif %}
+<div class="wrap">
+  {%- assign events = site.events | sort: 'date' | reverse %}
+  <ul class="event-list">
+    {%- for e in events %}
+    <li class="event-item">
+      <p class="event-date"><span class="day">{{ e.date | date: '%-d' }}</span><span class="month">{{ e.date | date: '%b %Y' }}</span></p>
+      <div class="event-main">
+        <h2><a href="{{ e.url | relative_url }}">{{ e.title }}</a></h2>
+        {%- capture meta -%}
+          {%- if e.time and e.time != "" %}{% include event-time.html time=e.time %}{% endif -%}
+          {%- if e.time and e.time != "" and e.location and e.location != "" %}, {% endif -%}
+          {%- if e.location and e.location != "" %}{{ e.location }}{% endif -%}
+        {%- endcapture %}
+        {%- if meta != "" %}
+        <p class="event-meta">{{ meta }}</p>
+        {%- endif %}
+        <p class="event-excerpt">{{ e.content | strip_html | normalize_whitespace | truncatewords: 26 }}</p>
+      </div>
+      {%- if e.image and e.image != "" %}
+      <a class="event-thumb" href="{{ e.url | relative_url }}" tabindex="-1" aria-hidden="true"><img src="{{ e.image | relative_url }}" alt="" loading="lazy" decoding="async"></a>
+      {%- endif %}
+    </li>
+    {%- endfor %}
+  </ul>
+</div>
